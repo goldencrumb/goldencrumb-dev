@@ -142,7 +142,7 @@
             margin: 10px 0;
         }
 
-        /* Quantity Selector Styles */
+        /* --- NEW: Quantity Selector Styles --- */
         .quantity-selector {
             display: flex;
             align-items: center;
@@ -179,7 +179,7 @@
             min-width: 20px;
         }
 
-        /* Sticky Bottom Cart Bar */
+        /* --- NEW: Sticky Bottom Cart Bar --- */
         .cart-bar {
             position: fixed;
             bottom: 0;
@@ -230,7 +230,6 @@
             gap: 10px;
             box-shadow: 0 4px 6px rgba(37, 211, 102, 0.2);
             transition: transform 0.2s;
-            cursor: pointer;
         }
 
         .whatsapp-checkout-btn:hover {
@@ -353,22 +352,15 @@
         <p>&copy; 2026 Golden Crumb. Proudly baked in Chennai.</p>
     </footer>
 
-    <!-- Cart Logics, Session Management & URL Structuring -->
+    <!-- Cart Logics & URL Structuring -->
     <script>
         const WHATSAPP_NUMBER = "917305590333";
-        
-        // Load existing cart from localStorage, or start a new empty one
-        let cart = JSON.parse(localStorage.getItem('goldenCrumbCart')) || {};
+        const cart = {};
 
         document.querySelectorAll('.product-card').forEach(card => {
             const name = card.getAttribute('data-name');
             const price = parseInt(card.getAttribute('data-price'));
             const countDisplay = card.querySelector('.qty-count');
-            
-            // Set the initial display if items were loaded from memory
-            if (cart[name]) {
-                countDisplay.textContent = cart[name];
-            }
             
             card.querySelector('.plus').addEventListener('click', () => {
                 cart[name] = (cart[name] || 0) + 1;
@@ -385,15 +377,9 @@
 
             function updateDisplay() {
                 countDisplay.textContent = cart[name] || 0;
-                saveCart();
                 calculateTotal();
             }
         });
-
-        // Function to save the current cart to the browser's memory
-        function saveCart() {
-            localStorage.setItem('goldenCrumbCart', JSON.stringify(cart));
-        }
 
         function calculateTotal() {
             let totalItems = 0;
@@ -428,29 +414,6 @@
                 cartBar.classList.remove('active');
             }
         }
-
-        // Run calculations on initial page load in case a cart was restored
-        calculateTotal();
-
-        // Clear cart memory upon checkout
-        const checkoutBtn = document.getElementById('whatsappCheckout');
-        checkoutBtn.addEventListener('click', () => {
-            // Remove from local storage
-            localStorage.removeItem('goldenCrumbCart');
-            
-            // Empty the live cart object
-            for (let key in cart) {
-                delete cart[key];
-            }
-            
-            // Reset all counters on the page to 0
-            document.querySelectorAll('.qty-count').forEach(display => {
-                display.textContent = '0';
-            });
-            
-            // Recalculate to immediately hide the sticky cart bar
-            calculateTotal();
-        });
     </script>
 
 </body>
