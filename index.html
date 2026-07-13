@@ -20,6 +20,7 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            padding-bottom: 100px; /* Space for sticky cart bar */
         }
 
         header {
@@ -47,7 +48,7 @@
             padding: 2rem 1rem;
         }
 
-        /* --- NEW: Promise Section Styles --- */
+        /* Promise Section Styles */
         .promise-section {
             background-color: white;
             padding: 40px 20px;
@@ -109,7 +110,6 @@
             font-size: 0.95rem;
             margin: 0;
         }
-        /* --- END: Promise Section Styles --- */
 
         .products-grid {
             display: grid;
@@ -125,6 +125,9 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
             border: 1px solid #EAE0D5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product-card h3 {
@@ -139,25 +142,103 @@
             margin: 10px 0;
         }
 
-        .whatsapp-btn {
-            display: inline-block;
+        /* --- NEW: Quantity Selector Styles --- */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .qty-btn {
+            background-color: var(--primary-bg);
+            border: 1px solid #EAE0D5;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover {
+            background-color: var(--accent-gold);
+            color: white;
+            border-color: var(--accent-gold);
+        }
+
+        .qty-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 20px;
+        }
+
+        /* --- NEW: Sticky Bottom Cart Bar --- */
+        .cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.08);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-top: 1px solid #EAE0D5;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .cart-bar.active {
+            transform: translateY(0);
+        }
+
+        .cart-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-summary {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .cart-total {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .whatsapp-checkout-btn {
             background-color: var(--whatsapp-green);
             color: white;
             text-decoration: none;
-            padding: 12px 24px;
+            padding: 14px 28px;
             border-radius: 50px;
             font-weight: bold;
-            margin-top: 15px;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(37, 211, 102, 0.2);
             transition: transform 0.2s;
         }
 
-        .whatsapp-btn:hover {
-            transform: scale(1.05);
+        .whatsapp-checkout-btn:hover {
+            transform: scale(1.03);
         }
 
         footer {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem 2rem 2rem;
             font-size: 0.9rem;
             color: #777;
         }
@@ -172,7 +253,7 @@
 
     <div class="container">
         
-        <!-- NEW: Our Promise Section -->
+        <!-- Our Promise Section -->
         <section class="promise-section">
             <h2>Our Promise: Real Ingredients, No Shortcuts</h2>
             <p class="promise-intro">
@@ -206,35 +287,134 @@
         <div class="products-grid">
             
             <!-- Product 1 -->
-            <div class="product-card">
-                <h3>Ragi Chocolate Cookies</h3>
-                <p>Rich, fudgy cookies made with organic finger millet and dark chocolate chunks. 100% guilt-free.</p>
-                <div class="price">₹250 / Box of 6</div>
-                <a href="https://wa.me/917305590333?text=Hi%20Golden%20Crumb!%20I%20would%20like%20to%20order%20the%20Ragi%20Chocolate%20Cookies." class="whatsapp-btn" target="_blank">Order via WhatsApp</a>
+            <div class="product-card" data-name="Ragi Chocolate Cookies" data-price="250">
+                <div>
+                    <h3>Ragi Chocolate Cookies</h3>
+                    <p>Rich, fudgy cookies made with organic finger millet and dark chocolate chunks. 100% guilt-free.</p>
+                </div>
+                <div>
+                    <div class="price">₹250 / Box of 6</div>
+                    <div class="quantity-selector">
+                        <button class="qty-btn minus">-</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn plus">+</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Product 2 -->
-            <div class="product-card">
-                <h3>Pearl Millet Banana Bread</h3>
-                <p>Moist and naturally sweet banana loaf baked with wholesome Bajra. Perfect for morning tea.</p>
-                <div class="price">₹350 / Loaf</div>
-                <a href="https://wa.me/917305590333?text=Hi%20Golden%20Crumb!%20I%20would%20like%20to%20order%20the%20Pearl%20Millet%20Banana%20Bread." class="whatsapp-btn" target="_blank">Order via WhatsApp</a>
+            <div class="product-card" data-name="Pearl Millet Banana Bread" data-price="350">
+                <div>
+                    <h3>Pearl Millet Banana Bread</h3>
+                    <p>Moist and naturally sweet banana loaf baked with wholesome Bajra. Perfect for morning tea.</p>
+                </div>
+                <div>
+                    <div class="price">₹350 / Loaf</div>
+                    <div class="quantity-selector">
+                        <button class="qty-btn minus">-</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn plus">+</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Product 3 -->
-            <div class="product-card">
-                <h3>Foxtail Millet Brownies</h3>
-                <p>Dense, gooey brownies packed with the nutritional power of Thinai. Refined sugar-free.</p>
-                <div class="price">₹400 / Box of 4</div>
-                <a href="https://wa.me/917305590333?text=Hi%20Golden%20Crumb!%20I%20would%20like%20to%20order%20the%20Foxtail%20Millet%20Brownies." class="whatsapp-btn" target="_blank">Order via WhatsApp</a>
+            <div class="product-card" data-name="Foxtail Millet Brownies" data-price="400">
+                <div>
+                    <h3>Foxtail Millet Brownies</h3>
+                    <p>Dense, gooey brownies packed with the nutritional power of Thinai. Refined sugar-free.</p>
+                </div>
+                <div>
+                    <div class="price">₹400 / Box of 4</div>
+                    <div class="quantity-selector">
+                        <button class="qty-btn minus">-</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn plus">+</button>
+                    </div>
+                </div>
             </div>
 
         </div>
     </div>
 
+    <!-- Sticky Bottom Cart Bar Container -->
+    <div class="cart-bar" id="cartBar">
+        <div class="cart-info">
+            <span class="cart-summary" id="cartSummary">0 items selected</span>
+            <span class="cart-total" id="cartTotal">₹0</span>
+        </div>
+        <a href="#" class="whatsapp-checkout-btn" id="whatsappCheckout" target="_blank">
+            <span>Place Order via WhatsApp</span>
+        </a>
+    </div>
+
     <footer>
         <p>&copy; 2026 Golden Crumb. Proudly baked in Chennai.</p>
     </footer>
+
+    <!-- Cart Logics & URL Structuring -->
+    <script>
+        const WHATSAPP_NUMBER = "917305590333";
+        const cart = {};
+
+        document.querySelectorAll('.product-card').forEach(card => {
+            const name = card.getAttribute('data-name');
+            const price = parseInt(card.getAttribute('data-price'));
+            const countDisplay = card.querySelector('.qty-count');
+            
+            card.querySelector('.plus').addEventListener('click', () => {
+                cart[name] = (cart[name] || 0) + 1;
+                updateDisplay();
+            });
+
+            card.querySelector('.minus').addEventListener('click', () => {
+                if (cart[name] && cart[name] > 0) {
+                    cart[name]--;
+                    if (cart[name] === 0) delete cart[name];
+                    updateDisplay();
+                }
+            });
+
+            function updateDisplay() {
+                countDisplay.textContent = cart[name] || 0;
+                calculateTotal();
+            }
+        });
+
+        function calculateTotal() {
+            let totalItems = 0;
+            let totalPrice = 0;
+            let messageText = "Hi Golden Crumb! I would like to place an order:\n\n";
+
+            document.querySelectorAll('.product-card').forEach(card => {
+                const name = card.getAttribute('data-name');
+                const price = parseInt(card.getAttribute('data-price'));
+                const qty = cart[name] || 0;
+
+                if (qty > 0) {
+                    totalItems += qty;
+                    totalPrice += (price * qty);
+                    messageText += `• ${qty}x ${name} (₹${price * qty})\n`;
+                }
+            });
+
+            messageText += `\nTotal Amount: ₹${totalPrice}\n\nPlease confirm my order and let me know the payment details!`;
+
+            const cartBar = document.getElementById('cartBar');
+            const cartSummary = document.getElementById('cartSummary');
+            const cartTotal = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('whatsappCheckout');
+
+            if (totalItems > 0) {
+                cartSummary.textContent = `${totalItems} item${totalItems > 1 ? 's' : ''} selected`;
+                cartTotal.textContent = `₹${totalPrice}`;
+                checkoutBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
+                cartBar.classList.add('active');
+            } else {
+                cartBar.classList.remove('active');
+            }
+        }
+    </script>
 
 </body>
 </html>
